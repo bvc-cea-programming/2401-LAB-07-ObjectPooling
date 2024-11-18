@@ -30,7 +30,7 @@ public class ObjectPool : MonoBehaviour
     public PooledObject GetPooledObject()
     {
         // if the stack is empty, create a new object and return it
-        
+        return null;
 
         // remove an object from the stack, activate it and return it.
     }
