@@ -18,25 +18,46 @@ public class ObjectPool : MonoBehaviour
         if(!objectToPool) return;
 
         // Initialize the Stack
+        poolStack = new Stack<PooledObject>(poolSize);
 
-        // Create a temp Pooled Object
+        // Populate the stack with pooled objects
+        for (int i = 0; i < poolSize; i++)
+        {
+            // Create a new instance of the object
+            PooledObject tempObject = Instantiate(objectToPool);
 
-        // Using a loop, and the temp pooled object or otherwise, populate the stack.
-        // while doing so, let the pooled object know about the object pool as well
-        // keep the object deactivated at start as well.
+            // Assign the pool reference to the object
+            tempObject.SetPool(this);
+
+            // Deactivate the object
+            tempObject.gameObject.SetActive(false);
+
+            // Push it into the stack
+            poolStack.Push(tempObject);
+        }
         
     }
 
     public PooledObject GetPooledObject()
     {
-        // if the stack is empty, create a new object and return it
-        
+        if (poolStack.Count == 0)
+        {
+            // If the pool is empty, create a new object
+            PooledObject newObject = Instantiate(objectToPool);
+            newObject.SetPool(this);
+            return newObject;
+        }
 
-        // remove an object from the stack, activate it and return it.
+        // Get an object from the pool
+        PooledObject pooledObject = poolStack.Pop();
+        pooledObject.gameObject.SetActive(true); // Activate it
+        return pooledObject;
     }
 
     public void ReturnToPool(PooledObject pooledObject)
     {
-        // add the object back in to the stack, and deactivate it
+        // Deactivate the object and add it back to the pool
+        pooledObject.gameObject.SetActive(false);
+        poolStack.Push(pooledObject);
     }
 }

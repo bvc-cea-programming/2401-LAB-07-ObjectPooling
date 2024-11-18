@@ -23,11 +23,30 @@ public class WeaponShootPooled : MonoBehaviour
         Debug.Log("SHOOT POOL!");
         
         // Return if the bullet pool is null
+        if (bulletPool == null)
+        {
+            Debug.LogError("Bullet pool is not assigned!");
+            return;
+        }
         
         // get an object from the pool
+        PooledObject bullet = bulletPool.GetPooledObject();
+        if (bullet == null) return;
+
         // set the position and the rotation
+        bullet.transform.position = shootPosition.position;
+        bullet.transform.rotation = shootPosition.rotation;
         
-        // shoot the object
-        // destroy or release the object after 2 seconds.
+        // Apply force to the bullet and shoot it
+        Rigidbody bulletRigidbody = bullet.GetComponent<Rigidbody>();
+        if (bulletRigidbody != null)
+        {
+            bulletRigidbody.linearVelocity = Vector3.zero; // Reset velocity
+            bulletRigidbody.AddForce(shootPosition.forward * shootSpeed, ForceMode.Acceleration);
+        }
+
+        // Release the object back to the pool after 2 seconds
+        bullet.Release(2f);
+
     }
 }
