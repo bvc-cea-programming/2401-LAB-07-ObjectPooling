@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class WeaponShootBasic : MonoBehaviour
@@ -23,9 +24,18 @@ public class WeaponShootBasic : MonoBehaviour
     private void Shoot()
     {
         Debug.Log("SHOOT!");
-        
+
         // Instantiate an "arrow basic" object and shoot towards the forward direction
         // tip: use ForceMode.Acceleration
         // Destroy the object after few seconds
+        GameObject tempBullet = Instantiate(bullet, this.transform.position, this.transform.rotation);
+        tempBullet.GetComponent<Rigidbody>().AddForce(tempBullet.transform.forward*shootSpeed, ForceMode.Acceleration);
+        StartCoroutine(DestroyArrow(tempBullet, 2));
+    }
+
+    IEnumerator DestroyArrow(GameObject Arrow, float t)
+    {
+        yield return new WaitForSeconds(t);
+        Destroy(Arrow);
     }
 }

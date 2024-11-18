@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class WeaponShootPooled : MonoBehaviour
@@ -21,13 +22,26 @@ public class WeaponShootPooled : MonoBehaviour
     private void Shoot()
     {
         Debug.Log("SHOOT POOL!");
-        
+
         // Return if the bullet pool is null
-        
+        if (bulletPool == null)
+        { return; }
         // get an object from the pool
         // set the position and the rotation
-        
+        PooledObject tempBullet = bulletPool.GetPooledObject();
+        tempBullet.transform.position = this.transform.position;
+        tempBullet.transform.rotation = this.transform.rotation;
+
+
         // shoot the object
+        tempBullet.GetComponent<Rigidbody>().AddForce(tempBullet.transform.forward * shootSpeed, ForceMode.Acceleration);
+
         // destroy or release the object after 2 seconds.
+        StartCoroutine(DeactivateArrow(tempBullet, 2));
+    }
+    IEnumerator DeactivateArrow(PooledObject Arrow, float t)
+    {
+        yield return new WaitForSeconds(t);
+        bulletPool.ReturnToPool(Arrow);
     }
 }
