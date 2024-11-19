@@ -24,18 +24,18 @@ public class WeaponShootPooled : MonoBehaviour
         Debug.Log("SHOOT POOL!");
         
         // Return if the bullet pool is null
-        if (bulletPool== null )return;
+        if (bulletPool == null )return;
         // get an object from the pool
-         var obj = bulletPool.GetPooledObject();
+        var obj = bulletPool.GetPooledObject();
 
         // set the position and the rotation
-        //obj.transform = shootPosition.position;
-        //obj.eulerAngles  = shootPosition.rotation;
+        obj.transform.position = shootPosition.position;
+        obj.transform.rotation = shootPosition.rotation;
 
 
         // shoot the object
         obj.GetComponent<Rigidbody>().AddForce(shootPosition.forward * shootSpeed, ForceMode.Acceleration);
         // destroy or release the object after 2 seconds.
-        Destroy( obj ,2f);
+        obj.Release(2f);
     }
 }

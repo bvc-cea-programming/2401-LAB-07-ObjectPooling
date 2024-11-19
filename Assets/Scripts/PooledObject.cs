@@ -19,7 +19,7 @@ public class PooledObject : MonoBehaviour
         }
         else
         {
-            Invoke("Release", 3);
+            Invoke("Release", time);
         }
     }
 
