@@ -25,7 +25,14 @@ public class WeaponShootBasic : MonoBehaviour
         Debug.Log("SHOOT!");
         
         // Instantiate an "arrow basic" object and shoot towards the forward direction
+        GameObject bulletSpawn = Instantiate(bullet, shootPosition.position, shootPosition.rotation);
+        Rigidbody rb = bulletSpawn.GetComponent<Rigidbody>();
+
         // tip: use ForceMode.Acceleration
+        rb.AddForce(shootPosition.forward * shootSpeed, ForceMode.Acceleration);
+
+
         // Destroy the object after few seconds
+        Destroy(bulletSpawn, 2f);
     }
 }

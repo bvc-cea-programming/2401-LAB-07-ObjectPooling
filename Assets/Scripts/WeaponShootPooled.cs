@@ -21,13 +21,26 @@ public class WeaponShootPooled : MonoBehaviour
     private void Shoot()
     {
         Debug.Log("SHOOT POOL!");
-        
+
         // Return if the bullet pool is null
-        
+        if (!bulletPool) return;
+
         // get an object from the pool
+        PooledObject bullet = bulletPool.GetPooledObject();
+        if (!bullet) return;
+
         // set the position and the rotation
-        
+        bullet.transform.position = shootPosition.position;
+        bullet.transform.rotation = shootPosition.rotation;
+
         // shoot the object
+        Rigidbody rb = bullet.GetComponent<Rigidbody>();
+        if (rb)
+        {
+            rb.linearVelocity = Vector3.zero; // Reset velocity
+            rb.AddForce(shootPosition.forward * shootSpeed, ForceMode.Acceleration);
+        }
         // destroy or release the object after 2 seconds.
+        bullet.Release(2f);
     }
 }
