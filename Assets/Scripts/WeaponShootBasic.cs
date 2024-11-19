@@ -8,7 +8,8 @@ public class WeaponShootBasic : MonoBehaviour
     [SerializeField] private float shootSpeed = 700f;
     [SerializeField] private Transform shootPosition;
     [SerializeField] private float cooldownWindow = 0.1f;
-
+    [SerializeField] private float destroyTimer = 7;
+    
     private float _nextTimeToShoot;
     private void FixedUpdate()
     {
@@ -23,7 +24,15 @@ public class WeaponShootBasic : MonoBehaviour
     private void Shoot()
     {
         Debug.Log("SHOOT!");
+        GameObject spawnedBullet = Instantiate(bullet, shootPosition.position, shootPosition.rotation);
         
+        Rigidbody bulletRigidbody = spawnedBullet.GetComponent<Rigidbody>();
+        
+        if (bulletRigidbody != null)
+        {
+            bulletRigidbody.AddForce(shootPosition.forward * shootSpeed, ForceMode.Acceleration);
+        }
+        Destroy(spawnedBullet,destroyTimer);
         // Instantiate an "arrow basic" object and shoot towards the forward direction
         // tip: use ForceMode.Acceleration
         // Destroy the object after few seconds
